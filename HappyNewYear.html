@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc Mừng Năm Mới 2026 - Xuân Bính Ngọ</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;900&family=Dancing+Script:wght@700&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #050505; /* Nền tối dịu hơn */
+            overflow: hidden;
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* --- PHẦN NỘI DUNG --- */
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            display: none;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        h1.title {
+            font-family: 'Dancing Script', cursive; /* Font chữ viết tay mềm mại cho Tết */
+            font-size: 4rem;
+            margin: 0;
+            color: #ffd700; /* Màu vàng kim */
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+            animation: pulse 2s infinite;
+        }
+
+        .year-display {
+            font-size: 8rem;
+            font-weight: 900;
+            margin: 0;
+            background: linear-gradient(to bottom, #ff0000, #ffff00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.6));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Đồng hồ đếm ngược */
+        .countdown-label {
+            margin-top: 10px;
+            font-size: 1rem;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .countdown-box {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .time-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 0, 0, 0.2); /* Nền đỏ nhạt */
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 215, 0, 0.3); /* Viền vàng */
+            min-width: 70px;
+        }
+
+        .time-val {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .time-text {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            margin-top: 5px;
+            color: #ffd700;
+        }
+
+        p.wishes {
+            font-size: 1.3rem;
+            margin-top: 30px;
+            color: #fff;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        /* --- MÀN HÌNH CHỜ --- */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #2e0b0b 0%, #000000 100%);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 0.8s ease;
+        }
+
+        .btn-start {
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(90deg, #ff0000, #ff9900);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            transition: transform 0.2s;
+            text-transform: uppercase;
+        }
+
+        .btn-start:hover { transform: scale(1.05); }
+
+        .loading-text { margin-top: 15px; color: #888; font-size: 0.9rem; }
+
+        @keyframes pulse { 50% { opacity: 0.8; text-shadow: 0 0 30px #ff0000; } }
+        @keyframes float { 50% { transform: translateY(-10px); } }
+
+        @media (max-width: 768px) {
+            h1.title { font-size: 2.5rem; }
+            .year-display { font-size: 5rem; }
+            .time-val { font-size: 1.5rem; }
+            .time-item { min-width: 50px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="overlay">
+        <button class="btn-start" onclick="startParty()">Mở Quà Tết 2026</button>
+        <p class="loading-text">Âm nhạc: Tết Nguyên Đán EDM (Pixabay)</p>
+    </div>
+
+    <audio id="bgMusic" loop crossorigin="anonymous">
+        <source src="https://cdn.pixabay.com/download/audio/2024/01/03/audio_8f51c3a18a.mp3?filename=tet-nguyen-an-viet-nam-edm-184076.mp3" type="audio/mpeg">
+        Trình duyệt không hỗ trợ phát nhạc.
+    </audio>
+
+    <div class="container" id="mainContent">
+        <h1 class="title">Chúc Mừng Năm Mới</h1>
+        <div class="year-display">2026</div>
+        
+        <div class="countdown-label">Đếm ngược Tết Bính Ngọ</div>
+        <div class="countdown-box">
+            <div class="time-item"><span class="time-val" id="d">00</span><span class="time-text">Ngày</span></div>
+            <div class="time-item"><span class="time-val" id="h">00</span><span class="time-text">Giờ</span></div>
+            <div class="time-item"><span class="time-val" id="m">00</span><span class="time-text">Phút</span></div>
+            <div class="time-item"><span class="time-val" id="s">00</span><span class="time-text">Giây</span></div>
+        </div>
+
+        <p class="wishes">
+            Tấn Tài Tấn Lộc - Vạn Sự Như Ý<br>
+            Cung Chúc Tân Xuân
+        </p>
+    </div>
+
+    <canvas id="canvas"></canvas>
+
+    <script>
+        /* --- 1. XỬ LÝ ÂM THANH & UI --- */
+        function startParty() {
+            // Ẩn màn hình chờ
+            const overlay = document.getElementById('overlay');
+            overlay.style.opacity = '0';
+            setTimeout(() => { overlay.style.display = 'none'; }, 800);
+            
+            // Hiện nội dung
+            document.getElementById('mainContent').style.display = 'block';
+
+            // Phát nhạc
+            const audio = document.getElementById("bgMusic");
+            audio.volume = 0.6; // Âm lượng vừa phải
+            var playPromise = audio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    // Nhạc bắt đầu chạy
+                }).catch(error => {
+                    console.log("Lỗi phát nhạc (có thể do đường truyền): " + error);
+                });
+            }
+        }
+
+        /* --- 2. ĐẾM NGƯỢC TẾT BÍNH NGỌ (17/02/2026) --- */
+        // Ngày mùng 1 Tết Âm Lịch 2026 là ngày 17 tháng 2 năm 2026 Dương lịch
+        const countDate = new Date("Feb 17, 2026 00:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const gap = countDate - now;
+
+            if (gap < 0) {
+                // Nếu đã qua Tết -> Ẩn đếm ngược, hiện lời chúc to hơn
+                document.querySelector('.countdown-box').style.display = 'none';
+                document.querySelector('.countdown-label').innerText = "Khai Xuân Đón Lộc!";
+                return;
+            }
+
+            const second = 1000;
+            const minute = second * 60;
+            const hour = minute * 60;
+            const day = hour * 24;
+
+            document.getElementById('d').innerText = Math.floor(gap / day);
+            document.getElementById('h').innerText = Math.floor((gap % day) / hour);
+            document.getElementById('m').innerText = Math.floor((gap % hour) / minute);
+            document.getElementById('s').innerText = Math.floor((gap % minute) / second);
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        /* --- 3. HIỆU ỨNG PHÁO HOA --- */
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        let cw = window.innerWidth, ch = window.innerHeight;
+        canvas.width = cw; canvas.height = ch;
+
+        window.addEventListener('resize', () => {
+            cw = window.innerWidth; ch = window.innerHeight;
+            canvas.width = cw; canvas.height = ch;
+        });
+
+        function random(min, max) { return Math.random() * (max - min) + min; }
+
+        class Firework {
+            constructor() {
+                this.x = random(50, cw - 50);
+                this.y = ch;
+                this.targetY = random(ch * 0.1, ch * 0.4);
+                this.speed = random(4, 7);
+                this.radius = 3;
+                // Màu sắc mang không khí Tết (Vàng, Đỏ, Cam, Xanh)
+                const colors = ['#FF0000', '#FFD700', '#FF4500', '#00FF00', '#00FFFF'];
+                this.color = colors[Math.floor(random(0, colors.length))];
+                this.history = [];
+            }
+            update() {
+                this.y -= this.speed;
+                this.history.push({x: this.x, y: this.y});
+                if(this.history.length > 3) this.history.shift();
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.fillStyle = this.color;
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x; this.y = y; this.color = color;
+                const angle = random(0, Math.PI * 2);
+                const velocity = random(2, 8);
+                this.vx = Math.cos(angle) * velocity;
+                this.vy = Math.sin(angle) * velocity;
+                this.alpha = 1;
+                this.decay = random(0.015, 0.03);
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += 0.1; // Trọng lực
+                this.alpha -= this.decay;
+            }
+            draw() {
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        let fireworks = [], particles = [];
+
+        function loop() {
+            requestAnimationFrame(loop);
+            // Tạo hiệu ứng vệt đuôi
+            ctx.fillStyle = "rgba(5, 5, 5, 0.2)";
+            ctx.fillRect(0, 0, cw, ch);
+
+            if (random(0, 1) < 0.05) fireworks.push(new Firework());
+
+            fireworks.forEach((fw, index) => {
+                fw.update(); fw.draw();
+                if (fw.y <= fw.targetY) {
+                    for(let i=0; i<50; i++) particles.push(new Particle(fw.x, fw.y, fw.color));
+                    fireworks.splice(index, 1);
+                }
+            });
+
+            particles.forEach((p, index) => {
+                p.update(); p.draw();
+                if(p.alpha <= 0) particles.splice(index, 1);
+            });
+        }
+        loop();
+    </script>
+</body>
+</html>
